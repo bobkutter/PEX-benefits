@@ -1,0 +1,17 @@
+{
+  "name": "PEX-Sheets",
+  "version": "1.0.1",
+  "description": "Manage workbook sheets based on PEX reports",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Bob Kutter",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^9.4.4"
+  },
+  "dependencies": {
+    "xlsx": "^0.15.4"
+  }
+}
