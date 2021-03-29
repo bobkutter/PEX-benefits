@@ -1,6 +1,6 @@
 PEX Sheets
 
-Manage workbook sheets based on PEX reports
+Manage Excel/CSV sheets based on PEX reports
 
 To build with npm
 
