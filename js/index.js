@@ -27,7 +27,7 @@ function showSelectionButtons(selectedButton) {
   // version is defined that we means we're in development
   // so alert the developer if hardcoded version does not
   // match package version.
-  let hardVersion = '1.0.1'
+  let hardVersion = '1.1.0'
   let pkgVersion = process.env.npm_package_version
   if (typeof(pkgVersion) != 'undefined') {
     if (hardVersion != pkgVersion) {
