@@ -29,6 +29,7 @@ const SpendingRuleSetColName = 'Spending Ruleset Name'
 const AccountIdColName = 'Account ID'
 const CustomIdColName = 'CustomId'
 const GrantExpColName = 'Grant Exp'
+const GrantNumColName = 'Grant #'
 const DateCardClosedColName = 'Date PEX Card Closed'
 
 // Columns to add
@@ -245,10 +246,11 @@ function processBeneFile() {
 
   // Get expiration dates from Excel workbook
   let expirationDatesByName = {}
+  let grantNumbersByName = {}
   let expDatesWorkbook
   try {
     expDatesWorkbook = getGrantExpirationWorkbook()
-    expirationDatesByName = getGrantExpirationDates(expDatesWorkbook)
+    expirationDatesByName = getGrantExpirationDates(expDatesWorkbook, grantNumbersByName)
   } catch (e) {
     showResults([e.message])
     return
@@ -278,6 +280,12 @@ function processBeneFile() {
       row[RevExpDateColName] = '12/31/2021'
     } else {
       row[RevExpDateColName] = ''
+    }
+
+    // Append Grant # to last name
+    let grantNum = grantNumbersByName[name]
+    if (typeof(grantNum) != 'undefined') {
+      row[LastNameColName] = row[LastNameColName] + ' (' + grantNum + ')'
     }
 
     // Deal with ledger balance and available balance differences
@@ -465,7 +473,7 @@ function getGrantExpirationWorkbook() {
   return XLSX.readFile(expDateFileName)
 }
 
-function getGrantExpirationDates(workbook) {
+function getGrantExpirationDates(workbook,grantNumbersByName) {
 
   let xlsxSheet = getSheet(workbook,CurrentBeneSheetName)
   let expDateSheet = XLSX.utils.sheet_to_json(xlsxSheet,{raw:false})
@@ -483,6 +491,8 @@ function getGrantExpirationDates(workbook) {
     }
 
     expDatesByName[name] = date
+
+    grantNumbersByName[name] = row[GrantNumColName]
   }
 
   return expDatesByName
@@ -523,6 +533,12 @@ function addSheet(dstWorkbook, srcWorkbook, sheetName) {
     let dateInMillis = Date.parse(str)
 
     if (dateInMillis >= (todayInMillis - thirtyDays)) {
+      // Add Grant # to last name
+      let grantNum = row[GrantNumColName]
+      if (typeof(grantNum) != 'undefined') {
+        row[LastNameColName] = row[LastNameColName] + ' (' + grantNum + ')'
+      }
+
       newSheet.push(row)
     }
   }
