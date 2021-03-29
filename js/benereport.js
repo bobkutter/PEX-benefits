@@ -31,6 +31,9 @@ const CustomIdColName = 'CustomId'
 const GrantExpColName = 'Grant Exp'
 const DateCardClosedColName = 'Date PEX Card Closed'
 
+// Columns to add
+const RevExpDateColName = 'Revised Exp Date'
+
 // Common button color definitions amongst all files
 const LightBlue = ' style="background-color:#33C3F0;color:#FFF" '
 const DarkBlue = ' style="background-color:#3365f0;color:#FFF" '
@@ -225,11 +228,18 @@ function processBeneFile() {
     return
   }
 
-  // Remove unneeded beneficiaries report columns
+  // Set up correct output column order
   for (let i = keys.length-1; i >= 0; i--) {
     let key = keys[i]
+
+    // Remove unneeded beneficiaries report columns
     if (key==EmailColName || key==CardNumberColName || key==LedgerBalColName || key==GroupNameColName || key==SpendingRuleSetColName || key==AccountIdColName || key==CustomIdColName) {
       keys.splice(i,1)
+    }
+
+    // Add new column for COVID-19
+    if (key==AvailBalColName) {
+      keys.splice(i,0,RevExpDateColName)
     }
   }
 
@@ -244,7 +254,7 @@ function processBeneFile() {
     return
   }
 
-  // Fix or remove columns from existing sheet
+  // Fix or remove cells in rows from existing sheet
   for (let i = 0; i < sheet.length; i++) {
     let row = sheet[i]
     let name = row[FirstNameColName].toLowerCase()+' '+row[LastNameColName].toLowerCase()
@@ -259,6 +269,15 @@ function processBeneFile() {
       row[ExpDateColName] = expirationDatesByName[name]
     } else {
       row[ExpDateColName] = ''
+    }
+
+    // Add new column for COVID-19
+    let expDate = new Date(row[ExpDateColName])
+    let expYear = expDate.getFullYear()
+    if (expYear == '2020' || expYear == '2021') {
+      row[RevExpDateColName] = '12/31/2021'
+    } else {
+      row[RevExpDateColName] = ''
     }
 
     // Deal with ledger balance and available balance differences
