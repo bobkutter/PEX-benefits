@@ -290,7 +290,7 @@ function processBeneFile() {
 
     // Deal with ledger balance and available balance differences
     if (row[LedgerBalColName] != row[AvailBalColName]) {
-      row[AvailBalColName] = row[LedgerBalColName]
+      //row[AvailBalColName] = row[LedgerBalColName]
       let str = 'Please get PEX pending date and copy to "Last Used Date" for '+row[FirstNameColName]+' '+row[LastNameColName]
       addDetails(str)
       writeLog(str)

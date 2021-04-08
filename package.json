@@ -1,6 +1,6 @@
 {
   "name": "PEX-Sheets",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Manage workbook sheets based on PEX reports",
   "main": "main.js",
   "scripts": {
